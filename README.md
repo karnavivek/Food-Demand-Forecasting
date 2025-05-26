@@ -18,5 +18,6 @@ To Gain Insights on Forecasting the Demand generate to the app, later making dec
 6) Make Models like ARIMA, LSTM, \& Hyperparameter Tune it to get the best possible results
 7) Benchmark all the models \& Select the best model to achieve the scope of the project.
 8) Making a Simple OOPS implementation (forecaster.py, class $TSForecaster$) for easy of use, to other stakeholders
+9) Proof-of-concept using streamlit, user can predict their own data on streamlit
 
 ### Future Work:

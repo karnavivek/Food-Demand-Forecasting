@@ -1,3 +1,5 @@
+import os
+import pickle
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -27,6 +29,7 @@ class TSForecaster:
     def plot_acf_pacf(self, data, lag):
         pacf = plot_pacf(data, lags=lag)
         acf = plot_acf(data, lags=lag)
+        return pacf, acf
 
     def stationarity_test(self, data):
         '''
@@ -41,9 +44,9 @@ class TSForecaster:
             print(f'Critical Value at {key}: {val}\n')
 
         if val_order_[1]>0.05:
-            return 'This Time Series Model is NON STATIONARY, may give bad predictions! :('
+            return f'This Time Series Model is NON STATIONARY because p-value = {val_order_[1]} i.e. > 0.05! :('
         else:
-            return 'This Time Series Model is STATIONARY, getting prediction is recommended! :)'
+            return f'This Time Series Model is STATIONARYbecause p-value = {val_order_[1]} i.e. < 0.05! :)'
 
     def make_stationary(self, data, order=1):
         '''
@@ -61,6 +64,15 @@ class TSForecaster:
 
         return np.array(X_data), np.array(y_data)
     
+    def pickle_model(self, model_type):
+        directory = '/Users/karnavivek/Food-Demand-Forecasting/forecast_models/'
+        filename = f'{model_type}_model.pkl'
+        filepath = os.path.join(directory, filename)
+        os.makedirs(directory, exist_ok=True)
+        with open(filepath, 'wb') as file:
+            pickle.dump(model_type, file)
+
+    
     def run_models(self, model_type: str, train_data, test_data, window_size=5):
         '''
         step-1 = check the stationarity of the train_data
@@ -73,6 +85,7 @@ class TSForecaster:
             scaler = MinMaxScaler(feature_range=(0,1))
             scaled_train_data = scaler.fit_transform(train_data)
             scaled_test_data = scaler.fit_transform(test_data)
+            
 
 
         elif model_type == 'lstm':
@@ -115,6 +128,8 @@ class TSForecaster:
                         metrics=[MeanAbsoluteError()])
 
             model.fit(X_train, y_train, shuffle = False, epochs=100, callbacks=[cp])
+
+            self.pickle_model(model)
 
             #Predicted data of the above model
             train_pred = model.predict(X_train)
