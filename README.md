@@ -20,4 +20,7 @@ To Gain Insights on Forecasting the Demand generate to the app, later making dec
 8) Making a Simple OOPS implementation (forecaster.py, class $TSForecaster$) for easy of use, to other stakeholders
 9) Proof-of-concept using streamlit, user can predict their own data on streamlit
 
+Visual Representation of Project:
+![alt text](image.png)
+
 ### Future Work:
